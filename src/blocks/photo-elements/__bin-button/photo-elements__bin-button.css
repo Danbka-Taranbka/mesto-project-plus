@@ -1,0 +1,21 @@
+.photo-elements__bin-button {
+  background: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background-image: url("../../../images/photo-bin.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 18px;
+  height: 19px;
+  transition: opacity 0.4s linear;
+  outline: none;
+}
+
+.photo-elements__bin-button:hover {
+  opacity: 0.6;
+}

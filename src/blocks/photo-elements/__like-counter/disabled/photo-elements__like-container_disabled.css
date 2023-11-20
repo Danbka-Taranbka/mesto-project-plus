@@ -1,0 +1,4 @@
+.photo-elements__like-counter_disabled {
+  opacity: 0;
+  visibility: hidden;
+}

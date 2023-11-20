@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Ольга" />
+    <meta name="description" content="Проект 2-го спринта" />
+    <meta name="keywords" content="HTML,CSS" />
+    <title>Проект 'Место'</title>
+  </head>
+
+  <body class="body">
+    <div class="page">
+      <header class="header page__header">
+        <img
+          class="header__logo"
+          src="<%=require('./images/logo.svg')%>"
+          alt="Логотип сайта"
+        />
+      </header>
+      <main class="content">
+        <section class="profile">
+          <div class="profile__one-form">
+            <div class="profile__avatar-container">
+              <img class="profile__avatar" src="#" alt="Фото пользователя" />
+            </div>
+            <div class="profile__info">
+              <h1 class="profile__name"></h1>
+              <button class="profile__edit-button" type="button"></button>
+              <p class="profile__about"></p>
+            </div>
+          </div>
+          <button class="profile__add-button" type="button"></button>
+        </section>
+        <section class="photo-elements">
+          <ul class="photo-elements__list"></ul>
+        </section>
+      </main>
+      <footer class="footer">
+        <p class="footer__copyright">© 2022 Mesto Russia</p>
+      </footer>
+
+      <div class="popup popup_profile">
+        <div class="popup__container">
+          <button
+            class="popup__btn-close popup__btn-close_profile"
+            type="button"
+          ></button>
+          <h2 class="popup__form-title">Редактировать профиль</h2>
+          <form novalidate class="form form_profile" name="profile">
+            <div class="form__input-field">
+              <label for="name" class="form__label"
+                ><input
+                  class="form__input form__input_name"
+                  type="text"
+                  name="name"
+                  id="name"
+                  placeholder="Введите имя"
+                  minlength="2"
+                  maxlength="40"
+                  data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                  pattern="^[а-яА-Яa-zA-Z\-\s]+$"
+                  required />
+                <span class="form__input-error-message name-error"></span
+              ></label>
+
+              <label for="about" class="form__label">
+                <input
+                  class="form__input form__input_about"
+                  type="text"
+                  name="about"
+                  id="about"
+                  placeholder="Расскажите о себе"
+                  minlength="2"
+                  maxlength="200"
+                  data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                  pattern="^[а-яА-Яa-zA-Z\-\s]+$"
+                  required
+                />
+                <span class="form__input-error-message about-error"></span>
+              </label>
+            </div>
+            <button class="form__submit-btn" type="submit" name="submitProfile">
+              Создать
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="popup popup_new-place">
+        <div class="popup__container">
+          <button
+            class="popup__btn-close popup__btn-close_place"
+            type="button"
+          ></button>
+          <h2 class="popup__form-title">Новое место</h2>
+          <form novalidate class="form form_place" name="card">
+            <div class="form__input-field">
+              <label for="place" class="form__label">
+                <input
+                  class="form__input form__input_place"
+                  type="text"
+                  name="place"
+                  id="place"
+                  placeholder="Название"
+                  minlength="2"
+                  maxlength="30"
+                  data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
+                  pattern="^[а-яА-Яa-zA-Z\-\s]+$"
+                  required
+                />
+                <span class="form__input-error-message place-error"></span>
+              </label>
+              <label for="link" class="form__label">
+                <input
+                  class="form__input form__input_link"
+                  type="url"
+                  name="link"
+                  id="link"
+                  data-error-message="Введите адрес сайта."
+                  placeholder="Ссылка на картинку"
+                  required
+                />
+                <span class="form__input-error-message link-error"></span>
+              </label>
+            </div>
+            <button class="form__submit-btn" type="submit" name="submitPlace">
+              Создать
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="popup popup_image-window">
+        <figure class="popup__figure">
+          <button
+            class="popup__btn-close popup__btn-close_image"
+            type="button"
+          ></button>
+          <img class="popup__image" />
+          <figcaption class="popup__caption"></figcaption>
+        </figure>
+      </div>
+
+      <div class="popup popup_agree-delete">
+        <div class="popup__container">
+          <button
+            class="popup__btn-close popup__btn-close_agree"
+            type="button"
+          ></button>
+          <h2 class="popup__agree-question">Вы уверены?</h2>
+          <button
+            class="popup__button popup__btn-agree"
+            type="button"
+            name="agreeDelete"
+          >
+            Да
+          </button>
+        </div>
+      </div>
+
+      <div class="popup popup_edit-avatar">
+        <div class="popup__container">
+          <button
+            class="popup__btn-close popup__btn-close_avatar"
+            type="button"
+          ></button>
+          <h2 class="popup__form-title">Обновить аватар</h2>
+          <form novalidate class="form form_avatar" name="avatar">
+            <div class="form__input-field">
+              <label for="avatar" class="form__label">
+                <input
+                  class="form__input form__input_avatar"
+                  type="url"
+                  name="avatar"
+                  id="avatar"
+                  data-error-message="Введите адрес сайта."
+                  placeholder="Ссылка на картинку"
+                  required
+                />
+                <span class="form__input-error-message avatar-error"></span>
+              </label>
+            </div>
+            <button class="form__submit-btn" type="submit" name="submitAvatar">
+              Сохранить
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <template id="photo-cards-template">
+      <li class="photo-elements__item">
+        <button class="photo-elements__bin-button" type="button"></button>
+        <img class="photo-elements__image" alt="Фото" />
+        <div class="photo-elements__footer">
+          <h2 class="photo-elements__title"></h2>
+          <div class="photo-elements__like-container">
+            <button class="photo-elements__like-button" type="button"></button>
+            <p class="photo-elements__like-counter">5</p>
+          </div>
+        </div>
+      </li>
+    </template>
+  </body>
+</html>

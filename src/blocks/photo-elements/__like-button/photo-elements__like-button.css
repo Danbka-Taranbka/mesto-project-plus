@@ -1,0 +1,16 @@
+.photo-elements__like-button {
+  background: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+  cursor: pointer;
+  background-image: url("../../../images/Vector-heart-black-border.svg");
+  background-size: cover;
+  width: 22px;
+  height: 19px;
+  transition: opacity 0.4s linear;
+}
+
+.photo-elements__like-button:hover {
+  opacity: 0.5;
+}
