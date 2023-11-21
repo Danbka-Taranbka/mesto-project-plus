@@ -1,9 +1,0 @@
-.photo-elements__image {
-    display: block;
-    width: 100%;
-    object-fit: cover;
-    aspect-ratio: 1/1;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    cursor: pointer;
-}
