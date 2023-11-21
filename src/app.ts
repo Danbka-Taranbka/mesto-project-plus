@@ -13,6 +13,13 @@ server.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(DB_ADDRESS);
 
+server.use((req, res, next) => {
+  req.body.user = {
+    _id: '655cab2ceec037f0a8edf926'
+  };
+  next();
+});
+
 server.use('/users', usersRouter);
 server.use('/cards', cardsRouter);
 
