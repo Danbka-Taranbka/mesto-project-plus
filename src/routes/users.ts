@@ -1,10 +1,10 @@
-import { Router, Request, Response } from 'express';
-import User from '../models/user';
+import { Router } from 'express';
+import { getUsers, getUserById, createUser } from '../controllers/users';
 
-const router = Router();
+const usersRouter = Router();
 
-router.get('/', (req: Request, res: Response) => {
-  return User.find({})
-    .then((users) => res.send({ data: users }))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
-});
+usersRouter.get('/', getUsers);
+usersRouter.get('/:id', getUserById);
+usersRouter.post('/', createUser);
+
+export default usersRouter;
