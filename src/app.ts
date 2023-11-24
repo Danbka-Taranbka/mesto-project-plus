@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import usersRouter from './routes/users';
 import cardsRouter from './routes/cards';
+import errorCatcher from './middlewares/error-catcher';
 
 const { DB_ADDRESS = "mongodb://127.0.0.1:27017/mestodb" } = process.env;
 const { PORT = 3000 } = process.env;
@@ -22,6 +23,8 @@ server.use((req, res, next) => {
 
 server.use('/users', usersRouter);
 server.use('/cards', cardsRouter);
+
+server.use(errorCatcher);
 
 server.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
