@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import usersRouter from './routes/users';
 import cardsRouter from './routes/cards';
 
-const {DB_ADDRESS = "mongodb://127.0.0.1:27017/mestodb"} = process.env;
+const { DB_ADDRESS = "mongodb://127.0.0.1:27017/mestodb" } = process.env;
 const { PORT = 3000 } = process.env;
 
 const server = express();
@@ -15,7 +15,7 @@ mongoose.connect(DB_ADDRESS);
 
 server.use((req, res, next) => {
   req.body.user = {
-    _id: '655cab2ceec037f0a8edf926'
+    _id: '655cab2ceec037f0a8edf926',
   };
   next();
 });
