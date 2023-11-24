@@ -1,14 +1,15 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from 'express';
 
 const errorCatcher = (
   err: any,
   req: Request,
   res: Response,
-  next: NextFunction) => {
+  next: NextFunction,
+) => {
   const { statusCode = 500, message } = err;
 
   res.status(statusCode).send({
-    message: statusCode === 500 ? "Server Error!" : message,
+    message: statusCode === 500 ? 'Server Error!' : message,
   });
   next();
 };
