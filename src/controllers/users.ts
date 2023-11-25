@@ -1,9 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { Error } from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import BadRequestError from "../errors/bad-request-err";
 import AuthenticationError from "../errors/auth-err";
 import User from '../models/user';
 import NotFoundError from "../errors/not-found-error";
+import { someSecretStr } from "../utils/constants";
+import { SessionRequest } from "../middlewares/auth";
 
 export const getUsers = (_req: Request, res: Response, next: NextFunction) => {
   return User.find({})
@@ -11,19 +15,12 @@ export const getUsers = (_req: Request, res: Response, next: NextFunction) => {
     .catch(next);
 };
 
-export const getUserById = (req: Request, res: Response, next: NextFunction) => {
-  return User.findById(req.params.id)
-    .then((user) => {
-      if (!user) throw new NotFoundError("There is no user with such id!");
-      res.status(200).send(user);
-    })
-    .catch(next);
-};
-
 export const createUser = (req: Request, res: Response, next: NextFunction) => {
-  const { name, about, avatar } = req.body;
+  const { name, about, avatar, email, password } = req.body;
 
-  return User.create({ name, about, avatar })
+  return bcrypt
+    .hash(password, 10)
+    .then((hash) => User.create({ name, about, avatar, email, password: hash }))
     .then((user) => res.status(200).send(user))
     .catch(
       (err) => {
@@ -40,10 +37,39 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
     );
 };
 
-export const editProfile = (req: Request, res: Response, next: NextFunction) => {
+export const loginUser = (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, someSecretStr, {
+        expiresIn: "7d",
+      });
+      res.cookie("token", token, { httpOnly: true }).send({ token, user });
+    })
+    .catch(next);
+};
+
+export const getUserById = (id: string, res: Response, next: NextFunction) => {
+  return User.findById(id)
+    .then((user) => {
+      if (!user) throw new NotFoundError("There is no user with such id!");
+      res.status(200).send(user);
+    })
+    .catch(next);
+};
+
+export const getCurrentUser = (req: SessionRequest, res: Response, next: NextFunction) => {
+  getUserById(req.user!._id, res, next);
+};
+
+export const getUser = (req: SessionRequest, res: Response, next: NextFunction) => {
+  getUserById(req.params.id, res, next);
+};
+
+export const editProfile = (req: SessionRequest, res: Response, next: NextFunction) => {
   return User.findByIdAndUpdate(
-    req.body.user._id,
-    { name: req.body.name, about: req.body.about },
+    req.user!._id,
+    req.body,
     {
       new: true,
       runValidators: true,
@@ -62,10 +88,10 @@ export const editProfile = (req: Request, res: Response, next: NextFunction) => 
     });
 };
 
-export const editAvatar = (req: Request, res: Response, next: NextFunction) => {
+export const editAvatar = (req: SessionRequest, res: Response, next: NextFunction) => {
   return User.findByIdAndUpdate(
-    req.body.user._id,
-    { avatar: req.body.avatar },
+    req.user!._id,
+    req.body,
     {
       new: true,
       runValidators: true,
