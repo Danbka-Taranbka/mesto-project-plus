@@ -6,7 +6,7 @@ export const getCards = (_req: Request, res: Response, next: NextFunction) => {
   return Card.find({})
     .populate("owner")
     .then((cards) => res.status(200).send(cards))
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 export const createCard = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,16 +15,16 @@ export const createCard = async (req: Request, res: Response, next: NextFunction
   return (await Card.create({ name, link, owner: req.body.user._id }))
     .populate("owner")
     .then((card) => res.status(201).send(card))
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 export const deleteCard = (req: Request, res: Response, next: NextFunction) => {
   return Card.findByIdAndRemove(req.params.id)
-    .orFail(() => {
-      throw new NotFoundError('There is no card with such _id!');
+    .then((card) => {
+      if (!card) throw new NotFoundError('There is no card with such _id!');
+      res.status(200).send(card);
     })
-    .then((card) => res.status(200).send(card))
-    .catch((err) => next(err));
+    .catch(next);
 };
 
 export const putLike = (req: Request, res: Response, next: NextFunction) => {
@@ -33,13 +33,13 @@ export const putLike = (req: Request, res: Response, next: NextFunction) => {
     { $addToSet: { likes: req.body.user._id } },
     { new: true },
   )
-    .orFail(() => {
-      throw new NotFoundError('There is no card with such _id!');
-    })
     .populate("likes")
     .populate("owner")
-    .then((card) => res.status(200).send(card))
-    .catch((err) => next(err));
+    .then((card) => {
+      if (!card) throw new NotFoundError('There is no card with such _id!');
+      res.status(200).send(card);
+    })
+    .catch(next);
 };
 
 export const removeLike = (req: Request, res: Response, next: NextFunction) => {
@@ -48,11 +48,11 @@ export const removeLike = (req: Request, res: Response, next: NextFunction) => {
     { $pull: { likes: req.body.user._id } },
     { new: true },
   )
-    .orFail(() => {
-      throw new NotFoundError('There is no card with such _id!');
-    })
     .populate("likes")
     .populate("owner")
-    .then((card) => res.status(200).send(card))
-    .catch((err) => next(err));
+    .then((card) => {
+      if (!card) throw new NotFoundError('There is no card with such _id!');
+      res.status(200).send(card);
+    })
+    .catch(next);
 };
