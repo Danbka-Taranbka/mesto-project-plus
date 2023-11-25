@@ -16,7 +16,6 @@ const errorCatcher = (
         ? "Server Error!"
         : message,
     });
-
   next();
 };
 

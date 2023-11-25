@@ -6,7 +6,7 @@ import User from '../models/user';
 import NotFoundError from "../errors/not-found-error";
 
 export const getUsers = (_req: Request, res: Response, next: NextFunction) => {
-  return User.find({})
+  User.find({})
     .then((users) => res.status(200).send(users))
     .catch(next);
 };
