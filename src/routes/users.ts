@@ -10,11 +10,11 @@ import { validateAvatar, validateObjectId, validateUserData } from '../middlewar
 
 const usersRouter = Router();
 
-usersRouter.get('/', getUsers);
-usersRouter.get('/:id', validateObjectId, getUser);
-
 usersRouter.get('/me', getCurrentUser);
 usersRouter.patch('/me', validateUserData, editProfile);
 usersRouter.patch('/me/avatar', validateAvatar, editAvatar);
+
+usersRouter.get('/', getUsers);
+usersRouter.get('/:id', validateObjectId, getUser);
 
 export default usersRouter;
