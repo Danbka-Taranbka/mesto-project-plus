@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { SERVER_ERROR_STATUS } from "../utils/constants";
 
 const errorCatcher = (
   err: any,
@@ -6,12 +7,12 @@ const errorCatcher = (
   res: Response,
   next: NextFunction,
 ) => {
-  const { statusCode = 500, message } = err;
+  const { statusCode = SERVER_ERROR_STATUS, message } = err;
 
   res
     .status(statusCode)
     .send({
-      message: statusCode === 500
+      message: statusCode === SERVER_ERROR_STATUS
         ? "Server Error!"
         : message,
     });
