@@ -1,9 +1,11 @@
+import { NOT_FOUND_STATUS } from "../utils/constants";
+
 class NotFoundError extends Error {
-  statusCode = 404;
+  statusCode = NOT_FOUND_STATUS;
 
   constructor(message: any) {
     super(message);
-    this.statusCode = 404;
+    this.statusCode = NOT_FOUND_STATUS;
   }
 }
 

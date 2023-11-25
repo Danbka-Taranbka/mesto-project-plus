@@ -1,9 +1,11 @@
+import { BAD_REQUEST_STATUS } from "../utils/constants";
+
 class BadRequestError extends Error {
-  statusCode = 400;
+  statusCode = BAD_REQUEST_STATUS;
 
   constructor(message: any) {
     super(message);
-    this.statusCode = 400;
+    this.statusCode = BAD_REQUEST_STATUS;
   }
 }
 
