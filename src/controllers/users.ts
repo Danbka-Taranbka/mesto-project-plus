@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Error } from "mongoose";
 import BadRequestError from "../errors/bad-request-err";
-import AuthenticationError from "../errors/auth-err";
 import User from '../models/user';
 import NotFoundError from "../errors/not-found-error";
 import { SUCCESS_STATUS } from "../utils/constants";
