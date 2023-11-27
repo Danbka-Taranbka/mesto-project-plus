@@ -6,12 +6,12 @@ import BadRequestError from "../errors/bad-request-err";
 import AuthenticationError from "../errors/auth-err";
 import User from '../models/user';
 import NotFoundError from "../errors/not-found-error";
-import { someSecretStr } from "../utils/constants";
+import { SUCCESS_STATUS, someSecretStr } from "../utils/constants";
 import { SessionRequest } from "../middlewares/auth";
 
 export const getUsers = (_req: Request, res: Response, next: NextFunction) => {
   return User.find({})
-    .then((users) => res.status(200).send(users))
+    .then((users) => res.status(SUCCESS_STATUS).send(users))
     .catch(next);
 };
 
@@ -21,7 +21,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
   return bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(SUCCESS_STATUS).send(user))
     .catch(
       (err) => {
         if (err instanceof Error.ValidationError) {
@@ -53,7 +53,7 @@ export const getUserById = (id: string, res: Response, next: NextFunction) => {
   return User.findById(id)
     .then((user) => {
       if (!user) throw new NotFoundError("There is no user with such id!");
-      res.status(200).send(user);
+      res.status(SUCCESS_STATUS).send(user);
     })
     .catch(next);
 };
@@ -77,7 +77,7 @@ export const editProfile = (req: SessionRequest, res: Response, next: NextFuncti
   )
     .then((user) => {
       if (!user) throw new NotFoundError("There is no user with such id!");
-      res.status(200).send(user);
+      res.status(SUCCESS_STATUS).send(user);
     })
     .catch((err) => {
       if (err instanceof Error.ValidationError) {
@@ -99,7 +99,7 @@ export const editAvatar = (req: SessionRequest, res: Response, next: NextFunctio
   )
     .then((user) => {
       if (!user) throw new NotFoundError("There is no user with such id!");
-      res.status(200).send(user);
+      res.status(SUCCESS_STATUS).send(user);
     })
     .catch((err) => {
       if (err instanceof Error.ValidationError) {

@@ -3,11 +3,12 @@ import Card from "../models/card";
 import NotFoundError from "../errors/not-found-error";
 import AuthenticationError from "../errors/auth-err";
 import { SessionRequest } from "../middlewares/auth";
+import { SUCCESS_STATUS } from "../utils/constants";
 
 export const getCards = (_req: Request, res: Response, next: NextFunction) => {
   return Card.find({})
     .populate("owner")
-    .then((cards) => res.status(200).send(cards))
+    .then((cards) => res.status(SUCCESS_STATUS).send(cards))
     .catch(next);
 };
 
@@ -16,7 +17,7 @@ export const createCard = async (req: SessionRequest, res: Response, next: NextF
 
   return (await Card.create({ name, link, owner: req.user!._id }))
     .populate("owner")
-    .then((card) => res.status(201).send(card))
+    .then((card) => res.status(SUCCESS_STATUS).send(card))
     .catch(next);
 };
 
@@ -29,7 +30,7 @@ export const deleteCard = (req: SessionRequest, res: Response, next: NextFunctio
     })
     .then((card) => {
       if (card.owner.toString() === req.user!._id) {
-        return Card.deleteOne({ _id: id }).then(() => res.status(200).send({ message: "Post is deleted!" }));
+        return Card.deleteOne({ _id: id }).then(() => res.status(SUCCESS_STATUS).send({ message: "Post is deleted!" }));
       }
       throw new AuthenticationError("You can delete only your cards!");
     })
@@ -46,7 +47,7 @@ export const putLike = (req: SessionRequest, res: Response, next: NextFunction) 
     .populate("owner")
     .then((card) => {
       if (!card) throw new NotFoundError('There is no card with such _id!');
-      res.status(200).send(card);
+      res.status(SUCCESS_STATUS).send(card);
     })
     .catch(next);
 };
@@ -61,7 +62,7 @@ export const removeLike = (req: SessionRequest, res: Response, next: NextFunctio
     .populate("owner")
     .then((card) => {
       if (!card) throw new NotFoundError('There is no card with such _id!');
-      res.status(200).send(card);
+      res.status(SUCCESS_STATUS).send(card);
     })
     .catch(next);
 };
