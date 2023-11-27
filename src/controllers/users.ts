@@ -20,8 +20,6 @@ export const getUserById = (req: Request, res: Response, next: NextFunction) => 
       (err) => {
         if (err instanceof Error.CastError) {
           next(new BadRequestError("There is no user with such id!"));
-        } else if (err instanceof Error.DocumentNotFoundError) {
-          next(new NotFoundError("Not Found!"));
         } else {
           next(err);
         }
@@ -59,10 +57,6 @@ export const editProfile = (req: Request, res: Response, next: NextFunction) => 
     .catch((err) => {
       if (err instanceof Error.ValidationError) {
         next(new ValidationError("Invalid data!"));
-      } else if (err instanceof Error.CastError) {
-        next(new BadRequestError("There is no user with such id!"));
-      } else if (err instanceof Error.DocumentNotFoundError) {
-        next(new NotFoundError("Not Found!"));
       } else {
         next(err);
       }
@@ -83,10 +77,6 @@ export const editAvatar = (req: Request, res: Response, next: NextFunction) => {
     .catch((err) => {
       if (err instanceof Error.ValidationError) {
         next(new ValidationError("Invalid data!"));
-      } else if (err instanceof Error.CastError) {
-        next(new BadRequestError("There is no user with such id!"));
-      } else if (err instanceof Error.DocumentNotFoundError) {
-        next(new NotFoundError("Not Found!"));
       } else {
         next(err);
       }

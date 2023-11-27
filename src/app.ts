@@ -1,7 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import usersRouter from './routes/users';
-import cardsRouter from './routes/cards';
+import router from './routes';
 import errorCatcher from './middlewares/error-catcher';
 
 const { DB_ADDRESS = "mongodb://127.0.0.1:27017/mestodb" } = process.env;
@@ -21,8 +20,7 @@ server.use((req, res, next) => {
   next();
 });
 
-server.use('/users', usersRouter);
-server.use('/cards', cardsRouter);
+server.use(router);
 
 server.use(errorCatcher);
 
