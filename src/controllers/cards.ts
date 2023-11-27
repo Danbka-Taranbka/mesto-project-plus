@@ -33,12 +33,8 @@ export const deleteCard = (req: Request, res: Response, next: NextFunction) => {
     .orFail(() => { throw new NotFoundError("Not Found!"); })
     .then((card) => { res.status(SUCCESS_STATUS).send(card); })
     .catch((err) => {
-      if (err instanceof Error.ValidationError) {
-        next(new ValidationError("Invalid data!"));
-      } else if (err instanceof Error.CastError) {
+      if (err instanceof Error.CastError) {
         next(new BadRequestError("There is no card with such id!"));
-      } else if (err instanceof Error.DocumentNotFoundError) {
-        next(new NotFoundError("Not Found!"));
       } else {
         next(err);
       }
@@ -56,12 +52,8 @@ export const putLike = (req: Request, res: Response, next: NextFunction) => {
     .populate("owner")
     .then((card) => { res.status(SUCCESS_STATUS).send(card); })
     .catch((err) => {
-      if (err instanceof Error.ValidationError) {
-        next(new ValidationError("Invalid data!"));
-      } else if (err instanceof Error.CastError) {
+      if (err instanceof Error.CastError) {
         next(new BadRequestError("There is no card with such id!"));
-      } else if (err instanceof Error.DocumentNotFoundError) {
-        next(new NotFoundError("Not Found!"));
       } else {
         next(err);
       }
@@ -79,12 +71,8 @@ export const removeLike = (req: Request, res: Response, next: NextFunction) => {
     .populate("owner")
     .then((card) => { res.status(SUCCESS_STATUS).send(card); })
     .catch((err) => {
-      if (err instanceof Error.ValidationError) {
-        next(new ValidationError("Invalid data!"));
-      } else if (err instanceof Error.CastError) {
+      if (err instanceof Error.CastError) {
         next(new BadRequestError("There is no card with such id!"));
-      } else if (err instanceof Error.DocumentNotFoundError) {
-        next(new NotFoundError("Not Found!"));
       } else {
         next(err);
       }
