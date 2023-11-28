@@ -57,8 +57,7 @@ export const putLike = (req: SessionRequest, res: Response, next: NextFunction) 
     { new: true },
   )
     .orFail(() => { throw new NotFoundError("Not Found!"); })
-    .populate("likes")
-    .populate("owner")
+    .populate(["likes", "owner"])
     .then((card) => { res.status(SUCCESS_STATUS).send(card); })
     .catch((err) => {
       if (err instanceof Error.CastError) {
@@ -76,8 +75,7 @@ export const removeLike = (req: SessionRequest, res: Response, next: NextFunctio
     { new: true },
   )
     .orFail(() => { throw new NotFoundError("Not Found!"); })
-    .populate("likes")
-    .populate("owner")
+    .populate(["likes", "owner"])
     .then((card) => { res.status(SUCCESS_STATUS).send(card); })
     .catch((err) => {
       if (err instanceof Error.CastError) {
