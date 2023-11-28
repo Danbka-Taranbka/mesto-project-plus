@@ -47,6 +47,7 @@
       "linebreak-style": "off",
       "no-unused-vars": 1,
       "arrow-body-style": 0,
-      "quotes": 0
+      "quotes": 0,
+      "object-curly-newline": 0
   }
 }

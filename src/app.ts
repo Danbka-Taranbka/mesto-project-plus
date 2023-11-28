@@ -1,27 +1,26 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import router from './routes';
+import cookieParser from "cookie-parser";
+import { errors } from 'celebrate';
 import errorCatcher from './middlewares/error-catcher';
+import { errorLogger, requestLogger } from './middlewares/logger';
+import routes from "./routes";
 
 const { DB_ADDRESS = "mongodb://127.0.0.1:27017/mestodb" } = process.env;
 const { PORT = 3000 } = process.env;
 
 const server = express();
+mongoose.connect(DB_ADDRESS);
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
+server.use(cookieParser());
 
-mongoose.connect(DB_ADDRESS);
+server.use(requestLogger);
+server.use(routes);
 
-server.use((req, res, next) => {
-  req.body.user = {
-    _id: '6563368b1fe808a8a4170f78',
-  };
-  next();
-});
-
-server.use(router);
-
+server.use(errorLogger);
+server.use(errors());
 server.use(errorCatcher);
 
 server.listen(PORT, () => {
