@@ -8,6 +8,7 @@ import User from '../models/user';
 import NotFoundError from "../errors/not-found-error";
 import { SUCCESS_STATUS, someSecretStr } from "../utils/constants";
 import { SessionRequest } from "../middlewares/auth";
+import ValidationError from "../errors/validation-err";
 
 export const getUsers = (_req: Request, res: Response, next: NextFunction) => {
   return User.find({})
@@ -25,7 +26,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
     .catch(
       (err) => {
         if (err instanceof Error.ValidationError) {
-          next(new BadRequestError(err.message));
+          next(new ValidationError("Invalid data!"));
         } else if (err.code === 11000) {
           next(
             new AuthenticationError("User with such email already exists!"),
@@ -51,11 +52,17 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
 
 export const getUserById = (id: string, res: Response, next: NextFunction) => {
   return User.findById(id)
-    .then((user) => {
-      if (!user) throw new NotFoundError("There is no user with such id!");
-      res.status(SUCCESS_STATUS).send(user);
-    })
-    .catch(next);
+    .orFail(() => { throw new NotFoundError("Not Found!"); })
+    .then((user) => { res.status(SUCCESS_STATUS).send(user); })
+    .catch(
+      (err) => {
+        if (err instanceof Error.CastError) {
+          next(new BadRequestError("There is no user with such id!"));
+        } else {
+          next(err);
+        }
+      },
+    );
 };
 
 export const getCurrentUser = (req: SessionRequest, res: Response, next: NextFunction) => {
@@ -75,13 +82,11 @@ export const editProfile = (req: SessionRequest, res: Response, next: NextFuncti
       runValidators: true,
     },
   )
-    .then((user) => {
-      if (!user) throw new NotFoundError("There is no user with such id!");
-      res.status(SUCCESS_STATUS).send(user);
-    })
+    .orFail(() => { throw new NotFoundError("Not Found!"); })
+    .then((user) => { res.status(SUCCESS_STATUS).send(user); })
     .catch((err) => {
       if (err instanceof Error.ValidationError) {
-        next(new BadRequestError(err.message));
+        next(new ValidationError("Invalid data!"));
       } else {
         next(err);
       }
@@ -97,13 +102,11 @@ export const editAvatar = (req: SessionRequest, res: Response, next: NextFunctio
       runValidators: true,
     },
   )
-    .then((user) => {
-      if (!user) throw new NotFoundError("There is no user with such id!");
-      res.status(SUCCESS_STATUS).send(user);
-    })
+    .orFail(() => { throw new NotFoundError("Not Found!"); })
+    .then((user) => { res.status(SUCCESS_STATUS).send(user); })
     .catch((err) => {
       if (err instanceof Error.ValidationError) {
-        next(new BadRequestError(err.message));
+        next(new ValidationError("Invalid data!"));
       } else {
         next(err);
       }

@@ -12,7 +12,7 @@ router.use(auth);
 router.use("/users", usersRouter);
 router.use("/cards", cardsRouter);
 router.use((req: Request, res: Response, next: NextFunction) => {
-  next(new NotFoundError("Not found!"));
+  next(new NotFoundError("Page Not found!"));
 });
 
 export default router;
