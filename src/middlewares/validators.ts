@@ -18,6 +18,14 @@ export const validateObjectId = celebrate({
   }),
 });
 
+export const validateSignIn = celebrate({
+  body: Joi.object()
+    .keys({
+      email: Joi.string().required(),
+      password: Joi.string().required(),
+    }),
+});
+
 export const validateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).messages({

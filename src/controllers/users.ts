@@ -6,9 +6,10 @@ import BadRequestError from "../errors/bad-request-err";
 import AuthenticationError from "../errors/auth-err";
 import User from '../models/user';
 import NotFoundError from "../errors/not-found-error";
-import { SUCCESS_STATUS, someSecretStr } from "../utils/constants";
+import { SUCCESS_STATUS } from "../utils/constants";
 import { SessionRequest } from "../middlewares/auth";
 import ValidationError from "../errors/validation-err";
+import { someSecretStr } from "../config";
 
 export const getUsers = (_req: Request, res: Response, next: NextFunction) => {
   return User.find({})
@@ -22,7 +23,10 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
   return bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
-    .then((user) => res.status(SUCCESS_STATUS).send(user))
+    .then((user) => {
+      const { _id } = user;
+      res.status(SUCCESS_STATUS).send({ name, about, avatar, _id });
+    })
     .catch(
       (err) => {
         if (err instanceof Error.ValidationError) {
@@ -42,10 +46,11 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      const { _id } = user;
       const token = jwt.sign({ _id: user._id }, someSecretStr, {
         expiresIn: "7d",
       });
-      res.cookie("token", token, { httpOnly: true }).send({ token, user });
+      res.cookie("token", token, { httpOnly: true }).send({ _id });
     })
     .catch(next);
 };
@@ -73,27 +78,7 @@ export const getUser = (req: SessionRequest, res: Response, next: NextFunction) 
   getUserById(req.params.id, res, next);
 };
 
-export const editProfile = (req: SessionRequest, res: Response, next: NextFunction) => {
-  return User.findByIdAndUpdate(
-    req.user!._id,
-    req.body,
-    {
-      new: true,
-      runValidators: true,
-    },
-  )
-    .orFail(() => { throw new NotFoundError("Not Found!"); })
-    .then((user) => { res.status(SUCCESS_STATUS).send(user); })
-    .catch((err) => {
-      if (err instanceof Error.ValidationError) {
-        next(new ValidationError("Invalid data!"));
-      } else {
-        next(err);
-      }
-    });
-};
-
-export const editAvatar = (req: SessionRequest, res: Response, next: NextFunction) => {
+export const editUser = (req: SessionRequest, res: Response, next: NextFunction) => {
   return User.findByIdAndUpdate(
     req.user!._id,
     req.body,
