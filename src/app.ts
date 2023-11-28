@@ -2,12 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cookieParser from "cookie-parser";
 import { errors } from 'celebrate';
+import { DB_ADDRESS, PORT } from './config';
 import errorCatcher from './middlewares/error-catcher';
 import { errorLogger, requestLogger } from './middlewares/logger';
 import routes from "./routes";
-
-const { DB_ADDRESS = "mongodb://127.0.0.1:27017/mestodb" } = process.env;
-const { PORT = 3000 } = process.env;
 
 const server = express();
 mongoose.connect(DB_ADDRESS);

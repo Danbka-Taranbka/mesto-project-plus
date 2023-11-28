@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { someSecretStr } from "../utils/constants";
+import { someSecretStr } from "../config";
 import AuthenticationError from "../errors/auth-err";
 
 interface Jwt extends JwtPayload {
