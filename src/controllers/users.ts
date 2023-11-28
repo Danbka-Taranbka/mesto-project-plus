@@ -23,7 +23,10 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
   return bcrypt
     .hash(password, 10)
     .then((hash) => User.create({ name, about, avatar, email, password: hash }))
-    .then((user) => res.status(SUCCESS_STATUS).send(user))
+    .then((user) => {
+      const { _id } = user;
+      res.status(SUCCESS_STATUS).send({ name, about, avatar, _id });
+    })
     .catch(
       (err) => {
         if (err instanceof Error.ValidationError) {
@@ -43,10 +46,11 @@ export const loginUser = (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      const { _id } = user;
       const token = jwt.sign({ _id: user._id }, someSecretStr, {
         expiresIn: "7d",
       });
-      res.cookie("token", token, { httpOnly: true }).send({ token, user });
+      res.cookie("token", token, { httpOnly: true }).send({ _id });
     })
     .catch(next);
 };
